@@ -1,3 +1,5 @@
+import java.util.Scanner; 
+
 public static void main(){
     System.out.print("==================== \n 
     CENTRAL DE ATENDIMENTO\n
@@ -10,5 +12,7 @@ public static void main(){
     6 - Consultar última operação realizada\n
     7 - Exibir histórico de operações\n
     8 - Desfazer última operação\n
-    0 – Encerrar\n")
+    0 – Encerrar\n");
+    Scanner s = new Scanner(System.In);
+    int opcao = s nextInt();
 }
