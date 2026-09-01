@@ -47,4 +47,8 @@ public class{
         } while (opc =! 0);
 }
 }
+<<<<<<< HEAD:MAIN/Menu.java
 >>>>>>> 69c01010568e24d034ff8e80c0ce9a69834c2b19:MAIN/Menu
+=======
+alteração
+>>>>>>> aac384382b319353696857d473b9b14e250aa4d4:MAIN/Menu
