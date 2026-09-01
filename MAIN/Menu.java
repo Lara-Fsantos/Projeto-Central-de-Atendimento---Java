@@ -1,3 +1,4 @@
+public class 
 public static void main(){
     System.out.print("==================== \n 
     CENTRAL DE ATENDIMENTO\n
