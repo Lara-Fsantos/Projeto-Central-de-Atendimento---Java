@@ -1,4 +1,4 @@
-public class Pilha <T> {
+class Pilha <T> {
 	private static final int TAM_DEFAULT = 100;
 	private	int topoPilha;
     private	T e[ ];

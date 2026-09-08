@@ -1,9 +1,23 @@
 import java.util.Scanner;
 public class Menu{
-    public ExibirMenu(){
+    public void exibirMenu(){
         Scanner s = new Scanner(System.in);
+        int opc;
         do {
-        int opc = s.nextInt();
+            System.out.println("====================");
+            System.out.println("CENTRAL DE ATENDIMENTO");
+            System.out.println("====================");
+            System.out.println("1 - Cadastrar nova solicitação");
+            System.out.println("2 - Consultar próxima solicitação");
+            System.out.println("3 - Atender próxima solicitação");
+            System.out.println("4 - Exibir fila de solicitações");
+            System.out.println("5 - Exibir quantidade de solicitações");
+            System.out.println("6 - Consultar última operação realizada");
+            System.out.println("7 - Exibir histórico de operações");
+            System.out.println("8 - Desfazer última operação");
+            System.out.println("0 – Encerrar");
+
+        opc = s.nextInt();
         switch(opc){
             case 1:
             case 2:
@@ -16,6 +30,6 @@ public class Menu{
             default:
         }
         } while (opc != 0);
-        scanner.close();
+        s.close();
 }
 }

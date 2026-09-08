@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-public class _AGenerics_PilhaSequencial {
-
 	public static void main(String[] args) {
 		try {
 		  Pilha<Integer> p = new Pilha<Integer> ();
@@ -23,9 +21,12 @@ public class _AGenerics_PilhaSequencial {
 		  
 		  System.out.print("\nO correspondente binario do valor " + nSalvo + " e: ");
 		  
-		  while (! p.isEmpty( )) System.out.print( p.pop( )); 
-		}catch(Exception e) {
+		  while (! p.isEmpty( )) System.out.print( p.pop( ));
+          s.close();
+		}
+        catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}
+        
 	}
-}
+

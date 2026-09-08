@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CentralAtendimento",
+            "request": "launch",
+            "mainClass": "CentralAtendimento",
+            "projectName": "Projeto-Central-de-Atendimento---Java_dc4c5107"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Iniciar o Chrome em relação a localhost",
