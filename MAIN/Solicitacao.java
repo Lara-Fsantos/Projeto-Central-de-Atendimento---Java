@@ -14,7 +14,7 @@ public class Solicitacao {
     // Formatador de data e hora no padrão brasileiro (dd/MM/yyyy HH:mm:ss)
     private static final DateTimeFormatter FORMATADOR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    // Construtor Padrão (Sem parâmetros)
+
     public Solicitacao() {
         this.codigo = 0;
         this.solicitante = "";
@@ -26,7 +26,6 @@ public class Solicitacao {
         this.responsavel = "Não atribuído";
     }
 
-    // Construtor Prático (Gera data/hora atual e ajusta status/responsável automaticamente)
     public Solicitacao(int codigo, String solicitante, String descricao, String categoria, int prioridade) {
         this.codigo = codigo;
         this.solicitante = solicitante;
@@ -38,7 +37,7 @@ public class Solicitacao {
         this.responsavel = "Não atribuído";
     }
 
-    // Construtor Completo
+
     public Solicitacao(int codigo, String solicitante, String descricao, String categoria, int prioridade, String status, String dataHoraAbertura, String responsavel) {
         this.codigo = codigo;
         this.solicitante = solicitante;
@@ -50,7 +49,7 @@ public class Solicitacao {
         this.responsavel = responsavel;
     }
 
-    // Getters e Setters
+
     public int getCodigo() {
         return codigo;
     }
