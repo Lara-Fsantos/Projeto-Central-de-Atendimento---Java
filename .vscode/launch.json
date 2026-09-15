@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Menu",
+            "request": "launch",
+            "mainClass": "Menu",
+            "projectName": "Projeto-Central-de-Atendimento---Java_dc4c5107"
+        },
+        {
+            "type": "java",
             "name": "CentralAtendimento",
             "request": "launch",
             "mainClass": "CentralAtendimento",

@@ -38,7 +38,7 @@ public class Menu {
                     String descricao = scanner.nextLine();
                     System.out.print("Categoria (HelpDesk/Suporte/Manutenção): ");
                     String categoria = scanner.nextLine();
-                    System.out.print("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
+                    //System.out.print("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
 
                     int prioridade = 0;
                     boolean prioridadeValida = false;
