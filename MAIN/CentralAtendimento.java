@@ -1,32 +1,49 @@
 import java.util.Scanner;
 
-	public static void main(String[] args) {
-		try {
-		  Pilha<Integer> p = new Pilha<Integer> ();
-		  int n, resto, nSalvo;
-		  Scanner s = new Scanner(System.in);
+	public class CentralAtendimento {
 
-		  System.out.print("\nDigite um numero inteiro em decimal: ");
-		  n = s.nextInt();
-		  nSalvo = n;
-		  System.out.println(p);			  
-		  do{
-		    resto = n % 2;
-		    p.push( resto );
-		    n = n / 2;
-		  }while ( n != 0);
-		  
-		  System.out.println("\nTotal de Elementos na pilha: " + p.sizeElements() );
-		  System.out.println(p);
-		  
-		  System.out.print("\nO correspondente binario do valor " + nSalvo + " e: ");
-		  
-		  while (! p.isEmpty( )) System.out.print( p.pop( ));
-          s.close();
+		public CentralAtendimento() {
+			System.out.println("[TESTE] Central de Atendimento inicializada!");
 		}
-        catch(Exception e) {
-			System.out.println("Erro: " + e.getMessage());
+
+		// 1 - Cadastrar nova solicitação
+		public void cadastrarSolicitacao(Solicitacao sol) {
+			System.out.println("[TESTE] Funcionalidade 1 funcionando! Solicitação #" + sol.getCodigo() + " recebida.");
 		}
-        
-	}
+
+		// 2 - Consultar próxima solicitação
+		public void consultarProxima() {
+			System.out.println("[TESTE] Funcionalidade 2 funcionando! (Consultar próxima)");
+		}
+
+		// 3 - Atender próxima solicitação
+		public void atenderProxima(String responsavel) {
+			System.out.println("[TESTE] Funcionalidade 3 funcionando! Atribuído ao responsável: " + responsavel);
+		}
+
+		// 4 - Exibir fila de solicitações
+		public void exibirFila() {
+			System.out.println("[TESTE] Funcionalidade 4 funcionando! (Exibir fila)");
+		}
+
+		// 5 - Exibir quantidade de solicitações
+		public void exibirQuantidadeFila() {
+			System.out.println("[TESTE] Funcionalidade 5 funcionando! (Exibir quantidade)");
+		}
+
+		// 6 - Consultar última operação realizada
+		public void consultarUltimaOperacao() {
+			System.out.println("[TESTE] Funcionalidade 6 funcionando! (Consultar última operação)");
+		}
+
+		// 7 - Exibir histórico de operações
+		public void exibirHistorico() {
+			System.out.println("[TESTE] Funcionalidade 7 funcionando! (Exibir histórico)");
+		}
+
+		// 8 - Desfazer última operação
+		public void desfazerUltimaOperacao() {
+			System.out.println("[TESTE] Funcionalidade 8 funcionando! (Desfazer última operação)");
+		}
+}
 

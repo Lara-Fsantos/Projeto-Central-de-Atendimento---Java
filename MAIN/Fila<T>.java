@@ -1,3 +1,4 @@
+
 class FilaCircular <T>{
 	// Constante e Atributos Privados
 	private static final int TAM_DEFAULT = 100;
