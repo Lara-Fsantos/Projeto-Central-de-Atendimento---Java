@@ -91,7 +91,10 @@ public class Menu {
                 case 8:
                     central.desfazerUltimaOperacao();
                     break;
-
+                case 9:
+                    //gerar dados de exemplo
+                    central.gerarDadosExemplo();
+                    break;
                 case 0:
                     System.out.println("Encerrando o sistema...");
                     break;

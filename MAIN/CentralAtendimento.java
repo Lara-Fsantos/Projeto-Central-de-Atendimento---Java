@@ -127,5 +127,28 @@
 
 			System.out.println("Sucesso: Atendimento da solicitação #" + sol.getCodigo() + " foi desfeito e ela retornou ao início da fila!");
 		}
-}
+		public void gerarDadosExemplo() {
+			
+			Solicitacao sol1 = new Solicitacao(1, "Alice", "Problema no computador", "HelpDesk", 0);
+			Solicitacao sol2 = new Solicitacao(2, "Bob", "Erro no software", "Suporte", 0);
+			Solicitacao sol3 = new Solicitacao(3, "Charlie", "Manutenção do servidor", "Manutenção", 0);
+			Solicitacao sol4 = new Solicitacao(4, "Diana", "Problema de rede", "HelpDesk", 0);
+			Solicitacao sol5 = new Solicitacao(5, "Eve", "Atualização de sistema", "Suporte", 0);
+			Solicitacao sol6 = new Solicitacao(6, "Frank", "Problema de hardware", "Manutenção", 0);
+			Solicitacao sol7 = new Solicitacao(7, "Grace", "Configuração de software", "Suporte", 0);
+			Solicitacao sol8 = new Solicitacao(8, "Hank", "Problema de impressão", "HelpDesk", 0);
+			Solicitacao sol9 = new Solicitacao(9, "Ivy", "Manutenção de rede", "Manutenção", 0);
 
+
+			cadastrarSolicitacao(sol1);
+			cadastrarSolicitacao(sol2);
+			cadastrarSolicitacao(sol3);
+			cadastrarSolicitacao(sol4);
+			cadastrarSolicitacao(sol5);
+			cadastrarSolicitacao(sol6);
+			cadastrarSolicitacao(sol7);
+			cadastrarSolicitacao(sol8);
+			cadastrarSolicitacao(sol9);
+			System.out.println("Dados de exemplo gerados com sucesso!");
+		}
+}
