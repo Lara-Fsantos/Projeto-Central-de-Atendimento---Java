@@ -26,13 +26,13 @@ public class Menu {
             try {
                 opcao = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Por favor, digite um número válido!");
+                System.out.println("\nPor favor, digite um número válido!");
                 continue;
             }
 
             switch (opcao) {
                 case 1:
-                    System.out.print("Nome do solicitante: ");
+                    System.out.print("\nNome do solicitante: ");
                     String nome = scanner.nextLine();
                     System.out.print("Descrição do problema: ");
                     String descricao = scanner.nextLine();
@@ -67,7 +67,7 @@ public class Menu {
                     break;
 
                 case 3:
-                    System.out.print("Informe o nome do responsável pelo atendimento: ");
+                    System.out.print("\nInforme o nome do responsável pelo atendimento: ");
                     String responsavel = scanner.nextLine();
                     central.atenderProxima(responsavel);
                     break;
@@ -92,7 +92,6 @@ public class Menu {
                     central.desfazerUltimaOperacao();
                     break;
                 case 9:
-                    //gerar dados de exemplo
                     central.gerarDadosExemplo();
                     break;
                 case 0:

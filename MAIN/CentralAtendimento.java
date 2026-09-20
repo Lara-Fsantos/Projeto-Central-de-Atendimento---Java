@@ -14,7 +14,7 @@
 			historicoOperacoes.push(new Operacao("CADASTRO", sol));
 		}
 		catch (Exception e) {
-				System.out.println("Não foi possível cadastrar a solicitação: " + e.getMessage());
+				System.out.println("\nNão foi possível cadastrar a solicitação: " + e.getMessage());
 			}
 		}
 
