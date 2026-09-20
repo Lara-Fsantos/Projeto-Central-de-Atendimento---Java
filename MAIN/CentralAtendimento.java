@@ -34,6 +34,7 @@
 			try {
 			Solicitacao atendi = filaEspera.dequeue();
                 atendi.setStatus("EM_ATENDIMENTO");
+				atendi.setResponsavel(responsavel);
 
                 historicoOperacoes.push(new Operacao("ATENDIMENTO", atendi));
 
