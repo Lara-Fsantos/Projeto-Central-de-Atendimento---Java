@@ -9,19 +9,29 @@
 
 		// 1 - Cadastrar nova solicitação
 		public void cadastrarSolicitacao(Solicitacao sol) {
+			try{
 			filaEspera.enqueue(sol);
 			historicoOperacoes.push(new Operacao("CADASTRO", sol));
+		}
+		catch (Exception e) {
+				System.out.println("Não foi possível cadastrar a solicitação: " + e.getMessage());
+			}
 		}
 
 		// 2 - Consultar próxima solicitação
 		public void consultarProxima() {
-			Solicitacao proxima = filaEspera.front();
-                System.out.println("--- PRÓXIMA SOLICITAÇÃO ---");
-                System.out.println(proxima);
+			try {
+				Solicitacao proxima = filaEspera.front();
+				System.out.println("--- PRÓXIMA SOLICITAÇÃO ---");
+				System.out.println(proxima);
+			} catch (Exception e) {
+				System.out.println("Não há solicitações na fila.");
+			}
 		}
 
 		// 3 - Atender próxima solicitação
 		public void atenderProxima(String responsavel) {
+			try {
 			Solicitacao atendi = filaEspera.dequeue();
                 atendi.setStatus("EM_ATENDIMENTO");
 
@@ -29,6 +39,10 @@
 
 			System.out.println("--- SOLICITAÇÃO EM ATENDIMENTO ---");
 			System.out.println(atendi);
+		}
+		catch (Exception e) {
+				System.out.println("Não há solicitações na fila.");
+			}
 		}
 
 		// 4 - Exibir fila de solicitações
@@ -45,9 +59,13 @@
 		// 6 - Consultar última operação realizada
 		public void consultarUltimaOperacao() {
 			//pegar da pilha de historico o topo
-			Operacao ultima = historicoOperacoes.topo();
-                System.out.println("--- ÚLTIMA OPERAÇÃO REALIZADA ---");
-                System.out.println(ultima);
+			try {
+				Operacao ultima = historicoOperacoes.topo();
+				System.out.println("--- ÚLTIMA OPERAÇÃO REALIZADA ---");
+				System.out.println(ultima);
+			} catch (Exception e) {
+				System.out.println("Não há operações no histórico.");
+			}
 		}
 
 		// 7 - Exibir histórico de operações
@@ -58,17 +76,27 @@
 
 		// 8 - Desfazer última operação
 		public void desfazerUltimaOperacao() {
-			
-			// Espia a última operação para verificar o tipo
-			Operacao ultimaOp = historicoOperacoes.topo();
+			Operacao ultimaOp;
+			try{
+			ultimaOp = historicoOperacoes.topo();
+			}
+			catch (Exception e) {
+				System.out.println("Não há operações no histórico para desfazer.");
+				return;
+			}
 
 			if (!ultimaOp.getTipo().equalsIgnoreCase("ATENDIMENTO")) {
 				System.out.println("Operação do topo (" + ultimaOp.getTipo() + ") não é do tipo 'ATENDIMENTO'. Não é possível desfazer!");
 				return;
 			}
 
-			// Remove da pilha
+			try {
 			ultimaOp = historicoOperacoes.pop();
+			}
+			catch (Exception e) {
+				System.out.println("Erro ao remover a última operação do histórico: " + e.getMessage());
+				return;
+			}
 			Solicitacao sol = ultimaOp.getSolicitacao();
 
 			// Altera status de volta para AGUARDANDO
@@ -77,12 +105,21 @@
 			// Reorganiza a fila usando FilaAuxiliar para inserir no INÍCIO
 			FilaCircular<Solicitacao> filaAuxiliar = new FilaCircular<Solicitacao>(100);
 
-			// 1º: Insere o elemento retornado no início da nova fila
+			try{
 			filaAuxiliar.enqueue(sol);
-
+			}
+			catch (Exception e) {
+				System.out.println("Erro ao adicionar a solicitação à fila auxiliar: " + e.getMessage());
+				return;
+			}
 			// 2º: Transfere os demais elementos da fila original para a auxiliar
-			while (!filaEspera.qIsEmpty()) {
-				filaAuxiliar.enqueue(filaEspera.dequeue());
+			try {
+				while (!filaEspera.qIsEmpty()) {
+					filaAuxiliar.enqueue(filaEspera.dequeue());
+				}
+			} catch (Exception e) {
+				System.out.println("Erro ao transferir elementos para a fila auxiliar: " + e.getMessage());
+				return;
 			}
 
 			// 3º: Substitui a referência
