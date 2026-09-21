@@ -42,6 +42,7 @@
 				System.out.println("Não há solicitações na fila.");
 			}
 
+			/*
 			// Aqui seria bom add um leve tempo para simular o atendimento, add o atendimento a pilha de operaçoes e colocala como concluida dps
 			try {
 				System.out.println("\nAtendimento em andamento...");
@@ -53,6 +54,7 @@
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+			*/
 
 		}
 

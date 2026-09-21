@@ -8,7 +8,7 @@ public class Menu {
 
         int opcao = -1;
 
-        while (opcao != 0 && scanner.hasNextLine()) {
+        while (opcao != 0) {
             System.out.println("\n========================================");
             System.out.println("CENTRAL DE ATENDIMENTO");
             System.out.println("========================================");
@@ -23,6 +23,11 @@ public class Menu {
             System.out.println("0 – Encerrar");
             System.out.println("-1 – Gerar dados de exemplo");
             System.out.print("Escolha uma opção: ");
+
+            if (!scanner.hasNextLine()) {
+                System.out.println("\nEntrada encerrada. Finalizando o sistema...");
+                break;
+            }
 
             try {
                 opcao = Integer.parseInt(scanner.nextLine());
