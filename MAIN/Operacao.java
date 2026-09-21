@@ -17,6 +17,6 @@ public class Operacao {
 
     @Override
     public String toString() {
-        return "Operacao [Tipo: " + tipo + " | Solicitação #" + solicitacao.getCodigo() + " - " + solicitacao.getSolicitante() + "]";
+        return "Operacao [Tipo: " + tipo + " | Solicitação #" + solicitacao.getCodigo() + " - " + solicitacao.getSolicitante() + "]\n";
     }
 }

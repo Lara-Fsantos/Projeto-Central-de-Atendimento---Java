@@ -105,6 +105,7 @@ public class Menu {
         scanner.close();
     }
 
+
     private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
         while (true) {
             System.out.print(mensagem);

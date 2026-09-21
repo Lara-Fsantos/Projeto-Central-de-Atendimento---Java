@@ -106,7 +106,7 @@ public class Solicitacao {
     public String toString() {
         return String.format("Solicitação #%d | Solicitante: %s | Categoria: %s\n" +
                              "Status: %s | Abertura: %s | Responsável: %s\n" +
-                             "Descrição: %s",
+                             "Descrição: %s\n",
             codigo, solicitante, categoria,
                 status, dataHoraAbertura, responsavel, descricao);
     }
