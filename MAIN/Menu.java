@@ -106,14 +106,16 @@ public class Menu {
     }
 
     private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
-        while (scanner.hasNextLine()) {
+        while (true) {
             System.out.print(mensagem);
+            if (!scanner.hasNextLine()) {
+                return null;
+            }
             String entrada = scanner.nextLine().trim();
             if (!entrada.isEmpty()) {
                 return entrada;
             }
             System.out.println("Entrada obrigatória. Tente novamente.");
         }
-        return null;
     }
 }
