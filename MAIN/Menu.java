@@ -51,8 +51,14 @@ public class Menu {
                         break;
                     }
 
-                    Solicitacao nova = new Solicitacao(codigoGerador++, nome, descricao, categoria);
+                    // Cria com o código atual sem usar 'codigoGerador++' no parâmetro
+                    Solicitacao nova = new Solicitacao(codigoGerador, nome, descricao, categoria);
+                    
+                    // Tenta cadastrar
                     central.cadastrarSolicitacao(nova);
+                    
+                    // Incrementa o contador apenas se passou pelo cadastro sem erro
+                    codigoGerador++;
                     break;
                 }
 
