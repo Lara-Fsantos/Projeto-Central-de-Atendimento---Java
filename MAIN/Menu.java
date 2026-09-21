@@ -8,7 +8,7 @@ public class Menu {
 
         int opcao = -1;
 
-        while (opcao != 0) {
+        while (opcao != 0 && scanner.hasNextLine()) {
             System.out.println("\n========================================");
             System.out.println("CENTRAL DE ATENDIMENTO");
             System.out.println("========================================");
@@ -32,33 +32,20 @@ public class Menu {
 
             switch (opcao) {
                 case 1:
-                    System.out.print("\nNome do solicitante: ");
-                    String nome = scanner.nextLine();
-                    System.out.print("Descrição do problema: ");
-                    String descricao = scanner.nextLine();
-                    System.out.print("Categoria (HelpDesk/Suporte/Manutenção): ");
-                    String categoria = scanner.nextLine();
-                    //System.out.print("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
-
-                    int prioridade = 0;
-                    boolean prioridadeValida = false;
-
-                    // Repete até o usuário digitar um número entre 1 e 3
-                    while (!prioridadeValida) {
-                        System.out.print("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
-                        try {
-                            prioridade = Integer.parseInt(scanner.nextLine());
-                            if (prioridade >= 1 && prioridade <= 3) {
-                                prioridadeValida = true;
-                            } else {
-                                System.out.println("Opção inválida! Digite apenas 1, 2 ou 3.");
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("Entrada inválida! Digite um número inteiro.");
-                        }
+                    String nome = lerCampoObrigatorio(scanner, "\nNome do solicitante: ");
+                    if (nome == null) {
+                        break;
+                    }
+                    String descricao = lerCampoObrigatorio(scanner, "Descrição do problema: ");
+                    if (descricao == null) {
+                        break;
+                    }
+                    String categoria = lerCampoObrigatorio(scanner, "Categoria (HelpDesk/Suporte/Manutenção): ");
+                    if (categoria == null) {
+                        break;
                     }
 
-                    Solicitacao nova = new Solicitacao(codigoGerador++, nome, descricao, categoria, prioridade);
+                    Solicitacao nova = new Solicitacao(codigoGerador++, nome, descricao, categoria);
                     central.cadastrarSolicitacao(nova);
                     break;
 
@@ -67,8 +54,11 @@ public class Menu {
                     break;
 
                 case 3:
-                    System.out.print("\nInforme o nome do responsável pelo atendimento: ");
-                    String responsavel = scanner.nextLine();
+                    String responsavel = lerCampoObrigatorio(scanner,
+                            "\nInforme o nome do responsável pelo atendimento: ");
+                    if (responsavel == null) {
+                        break;
+                    }
                     central.atenderProxima(responsavel);
                     break;
 
@@ -105,5 +95,17 @@ public class Menu {
         }
 
         scanner.close();
+    }
+
+    private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
+        while (scanner.hasNextLine()) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine().trim();
+            if (!entrada.isEmpty()) {
+                return entrada;
+            }
+            System.out.println("Entrada obrigatória. Tente novamente.");
+        }
+        return null;
     }
 }
