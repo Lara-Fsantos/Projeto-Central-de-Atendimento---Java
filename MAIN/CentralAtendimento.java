@@ -41,8 +41,8 @@
 			} catch (Exception e) {
 				System.out.println("Não há solicitações na fila.");
 			}
-		}
-			/* Aqui seria bom add um leve tempo para simular o atendimento, add o atendimento a pilha de operaçoes e colocala como concluida dps
+
+			// Aqui seria bom add um leve tempo para simular o atendimento, add o atendimento a pilha de operaçoes e colocala como concluida dps
 			try {
 				System.out.println("\nAtendimento em andamento...");
 				historicoOperacoes.push(new Operacao("EM_ATENDIMENTO", atendi));
@@ -52,7 +52,10 @@
 				historicoOperacoes.push(new Operacao("CONCLUIDA", atendi));
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-			}*/
+			}
+
+		}
+
 			
 		
 				
@@ -138,6 +141,7 @@
 
 			System.out.println("Sucesso: Atendimento da solicitação #" + sol.getCodigo() + " foi desfeito e ela retornou ao início da fila!");
 		}
+
 		public void gerarDadosExemplo() {
 			
 			Solicitacao sol1 = new Solicitacao(1, "Alice", "Problema no computador", "HelpDesk");
@@ -162,4 +166,5 @@
 			cadastrarSolicitacao(sol9);
 			System.out.println("Dados de exemplo gerados com sucesso!");
 		}
+
 }

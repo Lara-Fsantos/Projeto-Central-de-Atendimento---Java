@@ -21,12 +21,13 @@ public class Menu {
             System.out.println("7 - Exibir histórico de operações");
             System.out.println("8 - Desfazer última operação");
             System.out.println("0 – Encerrar");
+            System.out.println("-1 – Gerar dados de exemplo");
             System.out.print("Escolha uma opção: ");
 
             try {
                 opcao = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("\nPor favor, digite um número válido!");
+                System.out.println("\nPor favor, digite uma opção válida!");
                 continue;
             }
 
@@ -81,7 +82,7 @@ public class Menu {
                 case 8:
                     central.desfazerUltimaOperacao();
                     break;
-                case 9:
+                case -1:
                     central.gerarDadosExemplo();
                     break;
                 case 0:
