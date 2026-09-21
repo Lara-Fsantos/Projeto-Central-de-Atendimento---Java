@@ -31,20 +31,25 @@
 
 		// 3 - Atender próxima solicitação
 		public void atenderProxima(String responsavel) {
-			try {
+				try {
 			Solicitacao atendi = filaEspera.dequeue();
-                atendi.setStatus("EM_ATENDIMENTO");
-				atendi.setResponsavel(responsavel);
-
-                historicoOperacoes.push(new Operacao("ATENDIMENTO", atendi));
-
+            atendi.setStatus("EM_ATENDIMENTO");
+			atendi.setResponsavel(responsavel);
+            historicoOperacoes.push(new Operacao("ATENDIMENTO", atendi));		
 			System.out.println("--- SOLICITAÇÃO EM ATENDIMENTO ---");
 			System.out.println(atendi);
-		}
-		catch (Exception e) {
-				System.out.println("Não há solicitações na fila.");
-			}
-		}
+			
+			/* Aqui seria bom add um leve tempo para simular o atendimento, add o atendimento a pilha de operaçoes e colocala como concluida dps
+			try {
+				System.out.println("\nAtendimento em andamento...");
+				historicoOperacoes.push(new Operacao("EM_ATENDIMENTO", atendi));
+				Thread.sleep(2000); // Simula o tempo de atendimento (2 segundos)
+				System.out.println("Atendimento concluído!");
+				atendi.setStatus("CONCLUIDA");
+				historicoOperacoes.push(new Operacao("CONCLUIDA", atendi));
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}*/
 
 		// 4 - Exibir fila de solicitações
 		public void exibirFila() {
