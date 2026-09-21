@@ -32,7 +32,7 @@ public class Menu {
             }
 
             switch (opcao) {
-                case 1:
+                case 1: {
                     String nome = lerCampoObrigatorio(scanner, "\nNome do solicitante: ");
                     if (nome == null) {
                         break;
@@ -49,12 +49,13 @@ public class Menu {
                     Solicitacao nova = new Solicitacao(codigoGerador++, nome, descricao, categoria);
                     central.cadastrarSolicitacao(nova);
                     break;
+                }
 
                 case 2:
                     central.consultarProxima();
                     break;
 
-                case 3:
+                case 3: {
                     String responsavel = lerCampoObrigatorio(scanner,
                             "\nInforme o nome do responsável pelo atendimento: ");
                     if (responsavel == null) {
@@ -62,6 +63,7 @@ public class Menu {
                     }
                     central.atenderProxima(responsavel);
                     break;
+                }
 
                 case 4:
                     central.exibirFila();
