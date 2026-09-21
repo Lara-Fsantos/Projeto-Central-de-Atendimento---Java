@@ -9,12 +9,22 @@
 
 		// 1 - Cadastrar nova solicitação
 		public void cadastrarSolicitacao(Solicitacao sol) {
-			try{
-			filaEspera.enqueue(sol);
-			historicoOperacoes.push(new Operacao("CADASTRO", sol));
-		}
-		catch (Exception e) {
-				System.out.println("\nNão foi possível cadastrar a solicitação: " + e.getMessage());
+			if (filaEspera.qIsFull()) {
+				System.out.println("\nErro: A fila de espera está cheia (capacidade máxima atingida)!");
+				return;
+			}
+			
+			if (historicoOperacoes.isFull()) {
+				System.out.println("\nErro: O histórico de operações está cheio!");
+				return;
+			}
+
+			try {
+				filaEspera.enqueue(sol);
+				historicoOperacoes.push(new Operacao("CADASTRO", sol));
+				System.out.println("Solicitação cadastrada com sucesso!");
+			} catch (Exception e) {
+				System.out.println("\nErro ao cadastrar solicitação: " + e.getMessage());
 			}
 		}
 
@@ -70,13 +80,17 @@
 
 		// 6 - Consultar última operação realizada
 		public void consultarUltimaOperacao() {
-			//pegar da pilha de historico o topo
+			if (historicoOperacoes.isEmpty()) {
+				System.out.println("Não há operações no histórico.");
+				return;
+			}
+
 			try {
 				Operacao ultima = historicoOperacoes.topo();
 				System.out.println("--- ÚLTIMA OPERAÇÃO REALIZADA ---");
 				System.out.println(ultima);
 			} catch (Exception e) {
-				System.out.println("Não há operações no histórico.");
+				System.out.println("Erro ao consultar histórico: " + e.getMessage());
 			}
 		}
 
@@ -88,6 +102,12 @@
 
 		// 8 - Desfazer última operação
 		public void desfazerUltimaOperacao() {
+
+			if (historicoOperacoes.isEmpty()) {
+				System.out.println("Não há operações no histórico para desfazer.");
+				return;
+			}
+
 			Operacao ultimaOp;
 			try{
 			ultimaOp = historicoOperacoes.topo();
