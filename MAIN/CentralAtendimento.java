@@ -76,11 +76,14 @@
 				Thread.currentThread().interrupt();
 			}
 		}	
-		
+
 		// 4 - Exibir fila de solicitações
 		public void exibirFila() {
 			//mostrar começo a fim fila
 			System.out.println(filaEspera);
+			if (filaEspera.qIsEmpty()) {
+				System.out.println("Não há solicitações na fila.");
+			}
 		}
 
 		// 5 - Exibir quantidade de solicitações
@@ -108,6 +111,9 @@
 		public void exibirHistorico() {
 			//Exibir toda Pilha
 			System.out.println(historicoOperacoes);
+			if(historicoOperacoes.isEmpty()) {
+				System.out.println("Não há operações no histórico.");
+			}
 		}
 
 		// 8 - Desfazer última operação
