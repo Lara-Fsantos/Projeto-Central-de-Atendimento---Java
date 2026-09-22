@@ -42,31 +42,41 @@
 		// 3 - Atender próxima solicitação
 		public void atenderProxima(String responsavel) {
 			Solicitacao atendi;
+			
+			// 1. Retira a solicitação da fila
 			try {
 				atendi = filaEspera.dequeue();
-            	atendi.setStatus("EM_ATENDIMENTO");
-				atendi.setResponsavel(responsavel);
-            	historicoOperacoes.push(new Operacao("ATENDIMENTO", atendi));		
-				System.out.println("--- SOLICITAÇÃO EM ATENDIMENTO ---");
-				System.out.println(atendi);
 			} catch (Exception e) {
 				System.out.println("Não há solicitações na fila.");
 				return;
-			}			
+			}
+
+			// 2. Atualiza o status e o responsável
+			atendi.setStatus("EM_ATENDIMENTO");
+			atendi.setResponsavel(responsavel);
+
+			// 3. Registra a operação no histórico UMA ÚNICA VEZ
+			try {
+				historicoOperacoes.push(new Operacao("ATENDIMENTO", atendi));
+			} catch (Exception e) {
+				System.out.println("Erro ao registrar no histórico: " + e.getMessage());
+			}
+
+			System.out.println("--- SOLICITAÇÃO EM ATENDIMENTO ---");
+			System.out.println(atendi);
+
+			// 4. Simula o tempo de atendimento
 			try {
 				System.out.println("\nAtendimento em andamento...");
-				historicoOperacoes.push(new Operacao("EM_ATENDIMENTO", atendi));
-				Thread.sleep(2000); // Simula o tempo de atendimento (2 segundos)
-				System.out.println("Atendimento concluído!");
+				Thread.sleep(2000); // Simula 2 segundos
 				atendi.setStatus("CONCLUIDA");
-				historicoOperacoes.push(new Operacao("CONCLUIDA", atendi));
-			} catch (Exception e) {
-				System.out.println("Erro ao concluir o atendimento: " + e.getMessage());
-				if (e instanceof InterruptedException) {
-					Thread.currentThread().interrupt();
-				}
+				System.out.println("Atendimento concluído com sucesso!");
+			} catch (InterruptedException e) {
+				System.out.println("Erro ao simular atendimento: " + e.getMessage());
+				Thread.currentThread().interrupt();
 			}
 		}	
+		
 		// 4 - Exibir fila de solicitações
 		public void exibirFila() {
 			//mostrar começo a fim fila
