@@ -12,14 +12,29 @@ public class Menu {
             System.out.println("\n========================================");
             System.out.println("CENTRAL DE ATENDIMENTO");
             System.out.println("========================================");
+            System.out.println("ATENDIMENTO");
             System.out.println("1 - Cadastrar nova solicitação");
             System.out.println("2 - Consultar próxima solicitação");
             System.out.println("3 - Atender próxima solicitação");
             System.out.println("4 - Exibir fila de solicitações");
-            System.out.println("5 - Exibir quantidade de solicitações");
+            System.out.println("5 - Quantidade de solicitações aguardando\n");
+            System.out.println("OPERAÇÕES");
             System.out.println("6 - Consultar última operação realizada");
-            System.out.println("7 - Exibir histórico de operações");
-            System.out.println("8 - Desfazer última operação");
+            System.out.println("7 - Exibir histórico recente");
+            System.out.println("8 - Desfazer última operação\n");
+            System.out.println("CADASTRO GERAL");
+            System.out.println("9 - Exibir todas as solicitações");
+            System.out.println("10 - Pesquisar solicitação por código");
+            System.out.println("11 - Remover solicitação");
+            System.out.println("12 - Exibir solicitações por status");
+            System.out.println("13 - Exibir solicitações por categoria\n");
+            System.out.println("HISTÓRICO DE ATENDIMENTOS");
+            System.out.println("14 - Exibir do primeiro ao último");
+            System.out.println("15 - Exibir do último ao primeiro");
+            System.out.println("16 - Navegar pelo histórico");
+            System.out.println("17 - Pesquisar atendimento\n");
+            System.out.println("RELATÓRIOS");
+            System.out.println("18 - Exibir resumo do sistema\n");
             System.out.println("0 – Encerrar");
             System.out.println("-1 – Gerar dados de exemplo");
             System.out.print("Escolha uma opção: ");
@@ -83,6 +98,7 @@ public class Menu {
                 case 5:
                     central.exibirQuantidadeFila();
                     break;
+                    //ver se ta certo
 
                 case 6:
                     central.consultarUltimaOperacao();
@@ -91,6 +107,7 @@ public class Menu {
                 case 7:
                     central.exibirHistorico();
                     break;
+                    //ver se ta certo
 
                 case 8:
                     central.desfazerUltimaOperacao();
