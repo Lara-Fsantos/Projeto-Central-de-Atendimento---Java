@@ -1,3 +1,5 @@
+package estruturas;
+
 // Classe NodeDLL<T>: Node de uma lista duplamente encadeada
 // genérica
 // Autor1: Ivan Carlos Alcântara de Oliveira.
