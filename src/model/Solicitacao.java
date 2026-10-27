@@ -1,3 +1,5 @@
+package model;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -7,12 +9,11 @@ public class Solicitacao {
     private String descricao;
     private String categoria;
     private String status; // AGUARDANDO, EM_ATENDIMENTO, CONCLUIDA, CANCELADA
-    private String dataHoraAbertura; 
+    private String dataHoraAbertura;
     private String responsavel;
 
     // Formatador de data e hora no padrão brasileiro (dd/MM/yyyy HH:mm:ss)
     private static final DateTimeFormatter FORMATADOR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-
 
     public Solicitacao() {
         this.codigo = 0;
@@ -34,7 +35,6 @@ public class Solicitacao {
         this.responsavel = "Não atribuído";
     }
 
-
     public Solicitacao(int codigo, String solicitante, String descricao, String categoria, String status, String dataHoraAbertura, String responsavel) {
         this.codigo = codigo;
         this.solicitante = solicitante;
@@ -44,7 +44,6 @@ public class Solicitacao {
         this.dataHoraAbertura = dataHoraAbertura;
         this.responsavel = responsavel;
     }
-
 
     public int getCodigo() {
         return codigo;

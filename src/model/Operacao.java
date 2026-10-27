@@ -1,3 +1,5 @@
+package model;
+
 public class Operacao {
     private String tipo; // "CADASTRO", "ATENDIMENTO", "CANCELAMENTO"
     private Solicitacao solicitacao;
