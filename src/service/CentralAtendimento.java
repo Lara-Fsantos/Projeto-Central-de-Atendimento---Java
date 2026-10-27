@@ -10,7 +10,7 @@ public class CentralAtendimento {
     private PilhaEncadeada<Operacao> historicoOperacoes;
 
     public CentralAtendimento() {
-        this.filaEspera = new FilaEncadeada<Solicitacao>(100);
+        this.filaEspera = new FilaEncadeada<Solicitacao>();
         this.historicoOperacoes = new PilhaEncadeada<Operacao>();
     }
 

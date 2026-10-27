@@ -4,24 +4,24 @@ package estruturas;
 // genérica
 // Autor1: Ivan Carlos Alcântara de Oliveira.
 // Data da Criação: 10/10/2026. 15h.
-public class NodeDLL<T extends Comparable<T>>{
+public class NoDuplo<T extends Comparable<T>>{
 	private T data;
-	private	NodeDLL<T> left, right;
+	private	NoDuplo<T> left, right;
 	
-	public	NodeDLL() {
+	public	NoDuplo() {
 		this(null, null, null);
 	}
 	
-	public NodeDLL(T data, NodeDLL<T> left, NodeDLL<T> right){
+	public NoDuplo(T data, NoDuplo<T> left, NoDuplo<T> right){
 			this.data = data;
 			this.left = left;
 			this.right = right;
 	};
 
 	public T getData() { return data;};
-	public NodeDLL<T> getLeft(){ return left;};
-	public NodeDLL<T> getRight(){ return right;};
+	public NoDuplo<T> getLeft(){ return left;};
+	public NoDuplo<T> getRight(){ return right;};
 	public void setData(T data) { this.data = data;};
-	public void setLeft(NodeDLL<T> left){ this.left = left; };
-	public void setRight(NodeDLL<T> right){ this.right = right; };
+	public void setLeft(NoDuplo<T> left){ this.left = left; };
+	public void setRight(NoDuplo<T> right){ this.right = right; }; 
 }

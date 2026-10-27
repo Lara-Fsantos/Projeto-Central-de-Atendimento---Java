@@ -4,11 +4,11 @@ package estruturas;
 // lista ligada genérica.
 // Autor1: Ivan Carlos Alcântara de Oliveira.
 // Data da Criação: 10/10/2026. 15h.
-public class LinkedList<T> {
+public class ListaSimples<T> {
 	private Node<T> head; // Ponteiro cabeça de lista
 	private int size; // Quantidade de elementos da lista ligada
-	// LinkedList(): construtor da Lista encadeada
-	public LinkedList() {
+	// ListaSimples(): construtor da Lista encadeada
+	public ListaSimples() {
 		head = null;
 		size = 0;
 	}

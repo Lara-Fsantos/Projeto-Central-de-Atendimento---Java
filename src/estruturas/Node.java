@@ -5,7 +5,7 @@ package estruturas;
 // De qualquer tipo de dado não primitivo.
 // Autor1: Ivan Carlos Alcântara de Oliveira.
 // Data da Criação: 10/10/2026. 15h.
-public class No<T>{
+public class Node<T>{
 	private T dado; // dado (tipo genérico) a ser armazenado no Node
 	private Node<T> prox; // ponteiro para o próximo Node (nó) da lista ligada
 	// Node(): construtor vazio
