@@ -1,102 +1,102 @@
 package estruturas;
 
-public class FilaEncadeada<T> {
-    private static final int TAM_DEFAULT = 100;
-    private int inicio, fim, qtde;
-    private T[] e;
+// Classe Fila<T>: relativa a fila dinâmica e encadeada.
+// Implementada como uma lista encadeada com nós do tipo classe Node<T>
+// Fila Genérica, de qualquer tipo de dado não primitivo.
+// Autor1: Ivan Carlos Alcântara de Oliveira.
+// Data da Criação: 10/10/2026. 15h.
+public class Fila<T> {
+    private Node<T> inicio;
+    private Node<T> fim;
+    private int qtde;
 
-    @SuppressWarnings("unchecked")
-    public FilaEncadeada(int tamanho) {
-        this.inicio = this.fim = this.qtde = 0;
-        e = (T[]) new Object[tamanho];
+    // Construtor 
+    public Fila( ) {
+        this.inicio = null;
+        this.fim = null;
+        this.qtde = 0;
     }
 
-    public FilaEncadeada() {
-        this(TAM_DEFAULT);
-    }
-
+    // Verifica se a fila esta vazia.
     public boolean qIsEmpty() {
         return qtde == 0;
     }
 
-    public boolean qIsFull() {
-        return qtde == e.length;
+    // Verifica se a lista está cheia.
+    // Como a lista utiliza alocação dinâmica de memória,
+    // não possui capacidade máxima predefinida.
+    // Caso não haja memória suficiente, 
+    // ocorre o erro em Java (OutOfMemoryError).
+    // @return false, pois a lista não possui limite fixo.
+    public boolean isFull() {
+       return false;
     }
 
+    // Insere um elemento no final da fila.
     public void enqueue(T e) throws Exception {
-        if (!qIsFull()) {
-            this.e[this.fim++] = e;
-            this.fim = this.fim % this.e.length;
-            this.qtde++;
+        Node<T> novo = new Node<T>(e, null);
+        if (qIsEmpty()) {
+            inicio = novo;
         } else {
-            throw new Exception("Oveflow - Estouro de Fila");
+            fim.setProx(novo);
         }
+        fim = novo;
+        qtde++;
     }
 
+    // Remove e retorna o elemento do inicio da fila.
     public T dequeue() throws Exception {
-        if (!qIsEmpty()) {
-            T aux = this.e[this.inicio];
-            this.inicio = ++this.inicio % this.e.length;
-            this.qtde--;
-            return aux;
+        if (qIsEmpty()) {
+            throw new Exception("underflow - Esvaziamento de Fila");
         }
-        throw new Exception("underflow - Esvaziamento de Fila");
+        T elemento = inicio.getDado();
+        inicio = inicio.getProx();
+        qtde--;
+        if (qIsEmpty()) {
+            fim = null;
+        }
+        return elemento;
     }
 
+    // Retorna o primeiro elemento, sem remover.
     public T front() throws Exception {
-        if (!qIsEmpty()) {
-            return e[inicio];
+        if (qIsEmpty()) {
+            throw new Exception("underflow - Esvaziamento de Fila");
         }
-        throw new Exception("underflow - Esvaziamento de Fila");
+        return inicio.getDado();
     }
 
+    // Retorna o ultimo elemento, sem remover.
     public T rear() throws Exception {
-        if (!qIsEmpty()) {
-            int pfinal = this.fim != 0 ? this.fim - 1 : this.e.length - 1;
-            return this.e[pfinal];
+        if (qIsEmpty()) {
+            throw new Exception("underflow - Esvaziamento de Fila");
         }
-        throw new Exception("underflow - Esvaziamento de Fila");
+        return fim.getDado();
     }
 
+    // Retorna o total de elementos armazenados.
     public int totalElementos() {
         return qtde;
     }
 
+    // Representacao textual do inicio para o fim.
     @Override
     public String toString() {
-        try {
-            int indiceNovo = (inicio + qtde) % e.length;
-            StringBuilder sb = new StringBuilder();
-            sb.append("[Fila] quantidade: ")
-                .append(qtde)
-                .append(", capacidade: ")
-                .append(e.length);
-            if (qtde != 0) {
-                sb.append(", primeiro: ")
-                    .append(front())
-                    .append(", último: ")
-                    .append(rear());
-            }
-
-            sb.append("\nConteudo da Fila': [ ");
-            if (qtde != 0) {
-                if (indiceNovo <= inicio) {
-                    for (int i = inicio; i < e.length; ++i) {
-                        sb.append("[").append(e[i]).append("]");
-                    }
-                    for (int i = 0; i < indiceNovo; ++i) {
-                        sb.append("[").append(e[i]).append("]");
-                    }
-                } else {
-                    for (int i = inicio; i < indiceNovo; ++i) {
-                        sb.append("[").append(e[i]).append("]");
-                    }
-                }
-            }
-            sb.append(" ]");
-            return sb.toString();
-        } catch (Exception e) {
-            return "Erro: " + e.getMessage();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[Fila] quantidade: ").append(qtde);
+        if (!qIsEmpty()) {
+            sb.append(", primeiro: ").append(inicio.getDado())
+              .append(", último: ").append(fim.getDado());
         }
+        sb.append("\nConteudo da Fila': [ ");
+        Node<T> atual = inicio;
+        while (atual != null) {
+            sb.append("[").append(atual.getDado()).append("]");
+            atual = atual.getProx();
+        }
+        sb.append(" ]");
+        return sb.toString();
     }
 }
+
+   
