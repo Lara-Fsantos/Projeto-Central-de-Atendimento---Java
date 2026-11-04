@@ -11,6 +11,7 @@ public class Solicitacao {
     private String status; // AGUARDANDO, EM_ATENDIMENTO, CONCLUIDA, CANCELADA
     private String dataHoraAbertura;
     private String responsavel;
+    private int prioridade;    
 
     // Formatador de data e hora no padrão brasileiro (dd/MM/yyyy HH:mm:ss)
     private static final DateTimeFormatter FORMATADOR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -23,9 +24,10 @@ public class Solicitacao {
         this.status = "AGUARDANDO";
         this.dataHoraAbertura = LocalDateTime.now().format(FORMATADOR);
         this.responsavel = "Não atribuído";
+        this.prioridade = 0;
     }
 
-    public Solicitacao(int codigo, String solicitante, String descricao, String categoria) {
+    public Solicitacao(int codigo, String solicitante, String descricao, String categoria, int prioridade) {
         this.codigo = codigo;
         this.solicitante = solicitante;
         this.descricao = descricao;
@@ -33,9 +35,10 @@ public class Solicitacao {
         this.status = "AGUARDANDO";
         this.dataHoraAbertura = LocalDateTime.now().format(FORMATADOR);
         this.responsavel = "Não atribuído";
+        this.prioridade = prioridade;
     }
 
-    public Solicitacao(int codigo, String solicitante, String descricao, String categoria, String status, String dataHoraAbertura, String responsavel) {
+    public Solicitacao(int codigo, String solicitante, String descricao, String categoria, String status, String dataHoraAbertura, String responsavel, int prioridade) {
         this.codigo = codigo;
         this.solicitante = solicitante;
         this.descricao = descricao;
@@ -43,6 +46,7 @@ public class Solicitacao {
         this.status = status;
         this.dataHoraAbertura = dataHoraAbertura;
         this.responsavel = responsavel;
+        this.prioridade = prioridade;
     }
 
     public int getCodigo() {
@@ -101,12 +105,20 @@ public class Solicitacao {
         this.responsavel = responsavel;
     }
 
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
+
     @Override
     public String toString() {
         return String.format("Solicitação #%d | Solicitante: %s | Categoria: %s\n" +
                              "Status: %s | Abertura: %s | Responsável: %s\n" +
-                             "Descrição: %s\n",
+                             "Descrição: %s\n" + "Prioridade: %d\n",
             codigo, solicitante, categoria,
-                status, dataHoraAbertura, responsavel, descricao);
+                status, dataHoraAbertura, responsavel, descricao, prioridade);
     }
 }

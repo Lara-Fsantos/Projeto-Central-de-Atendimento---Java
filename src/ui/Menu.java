@@ -57,7 +57,8 @@ public class Menu {
             }
 
             switch (opcao) {
-                case 1: {
+                case 1: { 
+                    //add verificador de prioridade valida
                     String nome = lerCampoObrigatorio(scanner, "\nNome do solicitante: ");
                     if (nome == null) {
                         break;
@@ -70,8 +71,15 @@ public class Menu {
                     if (categoria == null) {
                         break;
                     }
-
-                    Solicitacao nova = new Solicitacao(codigoGerador, nome, descricao, categoria);
+                    int prioridade = 0; 
+                         try {
+                                prioridade = Integer.parseInt(scanner.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("\nPor favor, digite uma opção válida!");
+                                continue;
+                            }    
+                    
+                    Solicitacao nova = new Solicitacao(codigoGerador, nome, descricao, categoria, prioridade);
                     central.cadastrarSolicitacao(nova);
                     codigoGerador++;
                     break;
