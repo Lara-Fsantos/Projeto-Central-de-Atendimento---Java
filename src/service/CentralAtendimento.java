@@ -4,6 +4,7 @@ import estruturas.FilaEncadeada;
 import estruturas.PilhaEncadeada;
 import model.Operacao;
 import model.Solicitacao;
+import ui.Menu;
 
 public class CentralAtendimento {
     private FilaEncadeada<Solicitacao> filaEsperaP1;
@@ -20,11 +21,13 @@ public class CentralAtendimento {
 
     }
     public boolean quemAtender() {
-        boolean atenderP1 = true;
-        if (contadorAtendimentos == 2) {
-            atenderP1 = false;
+        if (filaEsperaP1.qIsEmpty()) {
+            return false;
         }
-        return atenderP1;
+         else if (contadorAtendimentos == 2) {
+            return false;
+        }
+        return true;
     }
     public void addAtender() {
          contadorAtendimentos++;
@@ -47,6 +50,7 @@ public class CentralAtendimento {
 
     public void consultarProxima() {
         try {
+
             if (quemAtender()) {
                 Solicitacao proxima = filaEsperaP1.front();
                 System.out.println("--- PRÓXIMA SOLICITAÇÃO PRIORIDADE 1 ---");
@@ -64,11 +68,13 @@ public class CentralAtendimento {
     public void atenderProxima(String responsavel) {
         Solicitacao atendi;
         try {
+
             if (quemAtender()) {
                 atendi = filaEsperaP1.dequeue();
             } else {
                 atendi = filaEsperaP2.dequeue();
             }
+            addAtender();
         } catch (Exception e) {
             System.out.println("Não há solicitações na fila.");
             return;
@@ -139,13 +145,24 @@ public class CentralAtendimento {
     }
 
     public void exibirHistoricoRecente() {
-        //RESOLVERR DEPOIS MO PREGUIÇA AGORA
-        System.out.println(historicoOperacoes);
-        if (historicoOperacoes.isEmpty()) {
-            System.out.println("Não há operações no histórico.");
+        PilhaEncadeada<Operacao> pilhaAux = new PilhaEncadeada<Operacao>();
+        for (int i=0; i<=10 && !historicoOperacoes.isEmpty();i++){
+            try {
+                pilhaAux.push(historicoOperacoes.pop());
+            } catch (Exception e) {
+                break;
+            }
+        }
+        System.out.println(pilhaAux);
+        while (!pilhaAux.isEmpty()) {
+            try {
+                historicoOperacoes.push(pilhaAux.pop());
+            } catch (Exception e) {
+                break;
+            }
         }
     }
-
+        
     public void desfazerUltimaOperacao() {
         if (historicoOperacoes.isEmpty()) {
             System.out.println("Não há operações no histórico para desfazer.");
@@ -159,8 +176,8 @@ public class CentralAtendimento {
             System.out.println("Não há operações no histórico para desfazer.");
             return;
         }
-        if (!ultimaOp.getTipo().equalsIgnoreCase("ATENDIMENTO")) {
-            System.out.println("Operação do topo (" + ultimaOp.getTipo() + ") não é do tipo 'ATENDIMENTO'. Não é possível desfazer!");
+        if (!ultimaOp.getTipo().equalsIgnoreCase("EM_ATENDIMENTO")) {
+            System.out.println("Operação do topo (" + ultimaOp.getTipo() + ") não é do tipo 'EM_ATENDIMENTO'. Não é possível desfazer!");
             return;
         }
         try {
@@ -179,31 +196,37 @@ public class CentralAtendimento {
             System.out.println("Erro ao adicionar a solicitação à fila auxiliar: " + e.getMessage());
             return;
         }
-        int prioridade = sol.getPrioridade();
-        filaEspera = new FilaEncadeada<Solicitacao>();  
+        int prioridade = sol.getPrioridade();  
         if (prioridade == 1) {
-            filaEspera = filaEsperaP1;
+            filaAuxiliar = filaEsperaP1;
         } else if (prioridade == 2) {
-            filaEspera = filaEsperaP2;
+            filaAuxiliar = filaEsperaP2;
         }
         try {
-            while (!filaEspera.qIsEmpty()) {
-                filaAuxiliar.enqueue(filaEspera.dequeue());
+            while (!filaAuxiliar.qIsEmpty()) {
+                if (prioridade == 1) {
+                    filaEsperaP1.enqueue(filaAuxiliar.dequeue());
+                } else {
+                    filaEsperaP2.enqueue(filaAuxiliar.dequeue());
+                }
             }
         } catch (Exception e) {
             System.out.println("Erro ao transferir elementos para a fila auxiliar: " + e.getMessage());
             return;
         }
-        this.filaEspera = filaAuxiliar;
         System.out.println("Sucesso: Atendimento da solicitação #" + sol.getCodigo() + " foi desfeito e ela retornou ao início da fila!");
     }
 
-    public void gerarDadosExemplo() {
+    public void gerarDadosExemplo(Menu menu) {
         Solicitacao[] solicitacoes = {
-           
+           new Solicitacao(menu.getCodigoGerador(), "João", "Problema de internet", "HelpDesk", 1),
+           new Solicitacao(menu.getCodigoGerador(), "Maria", "Problema de hardware", "Suporte", 2),
+           new Solicitacao(menu.getCodigoGerador(), "Pedro", "Problema de manutenção", "Manutenção", 1),
+           new Solicitacao(menu.getCodigoGerador(), "Ana", "Problema de software", "HelpDesk", 2)
         };
         for (Solicitacao solicitacao : solicitacoes) {
             cadastrarSolicitacao(solicitacao);
+
         }
         System.out.println("Dados de exemplo gerados com sucesso!");
     }
