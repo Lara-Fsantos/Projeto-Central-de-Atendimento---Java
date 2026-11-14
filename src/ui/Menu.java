@@ -83,9 +83,9 @@ public class Menu {
                         System.out.println("\nPor favor, digite uma prioridade válida!");
                         continue;
                     }
-                    Solicitacao nova = new Solicitacao(codigoGerador, nome, descricao, categoria, prioridade);
+                    Solicitacao nova = new Solicitacao(
+                        proximoCodigoGerador(), nome, descricao, categoria, prioridade);
                     central.cadastrarSolicitacao(nova);
-                    codigoGerador++;
                     break;
                 }
                 case 2:
@@ -134,17 +134,27 @@ public class Menu {
                     System.out.println("Teste, funcionou!");
                     break;
                 case 15:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirHistoricoAtendimentos(true);
                     break;
                 case 16:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirHistoricoAtendimentos(false);
                     break;
                 case 17:
-                    System.out.println("Teste, funcionou!");
+                    central.navegarHistoricoAtendimentos(scanner);
                     break;
-                case 18:
-                    System.out.println("Teste, funcionou!");
+                case 18: {
+                    System.out.print("Informe o código do atendimento: ");
+                    if (!scanner.hasNextLine()) {
+                        break;
+                    }
+                    try {
+                        int codigo = Integer.parseInt(scanner.nextLine().trim());
+                        central.pesquisarAtendimento(codigo);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Código inválido. Digite um número inteiro.");
+                    }
                     break;
+                }
                 case 19:
                     System.out.println("Teste, funcionou!");
                     break;
@@ -164,6 +174,9 @@ public class Menu {
     }
     public int getCodigoGerador() {
         return codigoGerador;
+    }
+    public int proximoCodigoGerador() {
+        return codigoGerador++;
     }
     private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
         while (true) {

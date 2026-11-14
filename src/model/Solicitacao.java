@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Solicitacao {
+public class Solicitacao implements Comparable<Solicitacao> {
     private int codigo;
     private String solicitante;
     private String descricao;
@@ -47,6 +47,11 @@ public class Solicitacao {
         this.dataHoraAbertura = dataHoraAbertura;
         this.responsavel = responsavel;
         this.prioridade = prioridade;
+    }
+
+    @Override
+    public int compareTo(Solicitacao outra) {
+        return Integer.compare(this.codigo, outra.codigo);
     }
 
     public int getCodigo() {

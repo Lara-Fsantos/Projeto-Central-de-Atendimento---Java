@@ -1,6 +1,10 @@
 package service;
 
+import java.util.Scanner;
+
 import estruturas.FilaEncadeada;
+import estruturas.ListaDupla;
+import estruturas.NoDuplo;
 import estruturas.PilhaEncadeada;
 import model.Operacao;
 import model.Solicitacao;
@@ -12,11 +16,13 @@ public class CentralAtendimento {
     private PilhaEncadeada<Operacao> historicoOperacoes;
     private int contadorAtendimentos = 0;
     private Solicitacao solicitacaoAtual;
+    private ListaDupla<Solicitacao> historicoAtendimento;
 
     public CentralAtendimento() {
         this.filaEsperaP1 = new FilaEncadeada<Solicitacao>();
         this.filaEsperaP2 = new FilaEncadeada<Solicitacao>();
         this.historicoOperacoes = new PilhaEncadeada<Operacao>();
+        this.historicoAtendimento = new ListaDupla<Solicitacao>();
         this.contadorAtendimentos = 0;
 
     }
@@ -82,6 +88,7 @@ public class CentralAtendimento {
 
         try {
             if (solicitacaoAtual != null) {
+                adicionarAoHistoricoAtendimento(solicitacaoAtual);
                 historicoOperacoes.push(new Operacao("CONCLUIDO", solicitacaoAtual));
             }
             solicitacaoAtual = atendi;
@@ -136,6 +143,7 @@ public class CentralAtendimento {
             return;
         }
         try {
+            adicionarAoHistoricoAtendimento(solicitacaoAtual);
             historicoOperacoes.push(new Operacao("CONCLUIDO", solicitacaoAtual));
             solicitacaoAtual = null;
             System.out.println("Atendimento concluído com sucesso.");
@@ -144,9 +152,17 @@ public class CentralAtendimento {
         }
     }
 
+    private void adicionarAoHistoricoAtendimento(Solicitacao solicitacao) {
+        solicitacao.setStatus("CONCLUIDA");
+        if (!historicoAtendimento.insertAscending(solicitacao)) {
+            throw new IllegalStateException(
+                "Não foi possível adicionar a solicitação ao histórico de atendimentos.");
+        }
+    }
+
     public void exibirHistoricoRecente() {
         PilhaEncadeada<Operacao> pilhaAux = new PilhaEncadeada<Operacao>();
-        for (int i=0; i<=10 && !historicoOperacoes.isEmpty();i++){
+        for (int i=0; i<10 && !historicoOperacoes.isEmpty();i++){
             try {
                 pilhaAux.push(historicoOperacoes.pop());
             } catch (Exception e) {
@@ -161,6 +177,81 @@ public class CentralAtendimento {
                 break;
             }
         }
+    }
+
+    public void exibirHistoricoAtendimentos(boolean ordemCrescente) {
+        if (historicoAtendimento.isEmpty()) {
+            System.out.println("Não há atendimentos concluídos no histórico.");
+            return;
+        }
+
+        if (ordemCrescente) {
+            System.out.println("--- ATENDIMENTOS CONCLUÍDOS: PRIMEIRO AO ÚLTIMO ---");
+            historicoAtendimento.showAscending();
+        } else {
+            System.out.println("--- ATENDIMENTOS CONCLUÍDOS: ÚLTIMO AO PRIMEIRO ---");
+            historicoAtendimento.showDescending();
+        }
+        System.out.println();
+    }
+    public void navegarHistoricoAtendimentos(Scanner scanner) {
+        if (historicoAtendimento.isEmpty()) {
+            System.out.println("Não há atendimentos concluídos no histórico.");
+            return;
+        }
+
+        NoDuplo<Solicitacao> atual = historicoAtendimento.getHead();
+        while (true) {
+            Solicitacao solicitacao = atual.getData();
+            System.out.println("\nAtendimento atual: " + solicitacao.getCodigo());
+            System.out.println(solicitacao);
+            System.out.println("[A] Anterior");
+            System.out.println("[P] Próximo");
+            System.out.println("[S] Sair");
+            System.out.print("Escolha uma opção: ");
+
+            if (!scanner.hasNextLine()) {
+                System.out.println();
+                return;
+            }
+
+            String opcao = scanner.nextLine().trim();
+            if (opcao.equalsIgnoreCase("S")) {
+                return;
+            } else if (opcao.equalsIgnoreCase("A")) {
+                if (atual.getLeft() == null) {
+                    System.out.println("Este é o primeiro atendimento do histórico.");
+                } else {
+                    atual = atual.getLeft();
+                }
+            } else if (opcao.equalsIgnoreCase("P")) {
+                if (atual.getRight() == null) {
+                    System.out.println("Este é o último atendimento do histórico.");
+                } else {
+                    atual = atual.getRight();
+                }
+            } else {
+                System.out.println("Opção inválida. Digite A, P ou S.");
+            }
+        }
+    }
+
+    public void pesquisarAtendimento(int codigo) {
+        if (historicoAtendimento.isEmpty()) {
+            System.out.println("Não há atendimentos concluídos no histórico.");
+            return;
+        }
+
+        Solicitacao busca = new Solicitacao();
+        busca.setCodigo(codigo);
+        int posicao = historicoAtendimento.searchAscending(busca);
+        if (posicao == -1) {
+            System.out.println("Atendimento #" + codigo + " não encontrado no histórico.");
+            return;
+        }
+
+        System.out.println("--- ATENDIMENTO ENCONTRADO ---");
+        System.out.println(historicoAtendimento.get(posicao).getData());
     }
         
     public void desfazerUltimaOperacao() {
@@ -220,16 +311,42 @@ public class CentralAtendimento {
     }
 
     public void gerarDadosExemplo(Menu menu) {
-        Solicitacao[] solicitacoes = {
-           new Solicitacao(menu.getCodigoGerador(), "João", "Problema de internet", "HelpDesk", 1),
-           new Solicitacao(menu.getCodigoGerador(), "Maria", "Problema de hardware", "Suporte", 2),
-           new Solicitacao(menu.getCodigoGerador(), "Pedro", "Problema de manutenção", "Manutenção", 1),
-           new Solicitacao(menu.getCodigoGerador(), "Ana", "Problema de software", "HelpDesk", 2)
+        String[] nomes = {
+            "João", "Maria", "Pedro", "Ana",
+            "Lucas", "Beatriz", "Rafael", "Camila"
         };
-        for (Solicitacao solicitacao : solicitacoes) {
-            cadastrarSolicitacao(solicitacao);
+        String[] descricoes = {
+            "Problema de internet", "Problema de hardware",
+            "Falha na impressora", "Erro no sistema",
+            "Acesso bloqueado", "Computador lento",
+            "Configuração de rede", "Solicitação de manutenção"
+        };
+        String[] categorias = {
+            "HelpDesk", "Suporte", "HelpDesk", "Suporte",
+            "Manutenção", "HelpDesk", "Suporte", "Manutenção"
+        };
+        int[] prioridades = {1, 2, 1, 2, 1, 2, 1, 2};
 
+        for (int i = 0; i < nomes.length; i++) {
+            Solicitacao solicitacao = new Solicitacao(
+                menu.proximoCodigoGerador(),
+                nomes[i],
+                descricoes[i],
+                categorias[i],
+                prioridades[i]);
+            cadastrarSolicitacao(solicitacao);
         }
-        System.out.println("Dados de exemplo gerados com sucesso!");
+
+        for (int i = 0; i < 4; i++) {
+            String responsavel = "Responsável de teste " + (i + 1);
+            atenderProxima(responsavel);
+            if (solicitacaoAtual != null) {
+                solicitacaoAtual.setStatus("EM_ATENDIMENTO");
+                solicitacaoAtual.setResponsavel(responsavel);
+            }
+        }
+        System.out.println(
+            "Dados de exemplo gerados: filas preenchidas, operações registradas, "
+            + "atendimentos concluídos e um atendimento em andamento.");
     }
 }
