@@ -180,40 +180,42 @@ public class CentralAtendimento {
             System.out.println("Operação do topo (" + ultimaOp.getTipo() + ") não é do tipo 'EM_ATENDIMENTO'. Não é possível desfazer!");
             return;
         }
+        Solicitacao sol = ultimaOp.getSolicitacao();
+        FilaEncadeada<Solicitacao> filaPrioridade;
         try {
-            ultimaOp = historicoOperacoes.pop();
+            if (quemAtender()) {
+                filaPrioridade = filaEsperaP1;
+            } else {
+                filaPrioridade = filaEsperaP2;
+            }
+        } catch (Exception e)  {
+            System.out.println("Não foi possível desfazer: prioridade da solicitação inválida.");
+            return;
+        }
+        
+        try {
+            int elementosExistentes = filaPrioridade.totalElementos();
+            sol.setStatus("AGUARDANDO");
+            filaPrioridade.enqueue(sol);
+            for (int i = 0; i < elementosExistentes; i++) {
+                filaPrioridade.enqueue(filaPrioridade.dequeue());
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao recolocar a solicitação na fila: " + e.getMessage());
+            return;
+        }
+
+        try {
+            historicoOperacoes.pop();
         } catch (Exception e) {
             System.out.println("Erro ao remover a última operação do histórico: " + e.getMessage());
             return;
         }
 
-        Solicitacao sol = ultimaOp.getSolicitacao();
-        sol.setStatus("AGUARDANDO");
-        FilaEncadeada<Solicitacao> filaAuxiliar = new FilaEncadeada<Solicitacao>();
-        try {
-            filaAuxiliar.enqueue(sol);
-        } catch (Exception e) {
-            System.out.println("Erro ao adicionar a solicitação à fila auxiliar: " + e.getMessage());
-            return;
+        if (solicitacaoAtual == sol) {
+            solicitacaoAtual = null;
         }
-        int prioridade = sol.getPrioridade();  
-        if (prioridade == 1) {
-            filaAuxiliar = filaEsperaP1;
-        } else if (prioridade == 2) {
-            filaAuxiliar = filaEsperaP2;
-        }
-        try {
-            while (!filaAuxiliar.qIsEmpty()) {
-                if (prioridade == 1) {
-                    filaEsperaP1.enqueue(filaAuxiliar.dequeue());
-                } else {
-                    filaEsperaP2.enqueue(filaAuxiliar.dequeue());
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao transferir elementos para a fila auxiliar: " + e.getMessage());
-            return;
-        }
+        contadorAtendimentos = (contadorAtendimentos + 2) % 3;
         System.out.println("Sucesso: Atendimento da solicitação #" + sol.getCodigo() + " foi desfeito e ela retornou ao início da fila!");
     }
 
