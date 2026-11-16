@@ -10,7 +10,7 @@ public class PilhaEncadeada<T> {
     private int quantidade;
 
     // Construtor 
-    public Pilha(int tamanho) {
+    public PilhaEncadeada() {
         this.topoPilha = null;
         this.quantidade = 0;
     }

@@ -6,10 +6,11 @@ import model.Solicitacao;
 import service.CentralAtendimento;
 
 public class Menu {
+    int codigoGerador;
     public void iniciar() {
         Scanner scanner = new Scanner(System.in);
         CentralAtendimento central = new CentralAtendimento();
-        int codigoGerador = 1;
+        codigoGerador = 1;
         int opcao = -1;
 
         while (opcao != 0) {
@@ -57,7 +58,7 @@ public class Menu {
             }
 
             switch (opcao) {
-                case 1: {
+                case 1: { 
                     String nome = lerCampoObrigatorio(scanner, "\nNome do solicitante: ");
                     if (nome == null) {
                         break;
@@ -70,10 +71,21 @@ public class Menu {
                     if (categoria == null) {
                         break;
                     }
-
-                    Solicitacao nova = new Solicitacao(codigoGerador, nome, descricao, categoria);
+                    int prioridade = 0; 
+                         try {
+                            System.out.print("Prioridade (1 ou 2): ");
+                                prioridade = Integer.parseInt(scanner.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("\nPor favor, digite uma opção válida!");
+                                continue;
+                            }    
+                    if (prioridade != 1 && prioridade != 2) {
+                        System.out.println("\nPor favor, digite uma prioridade válida!");
+                        continue;
+                    }
+                    Solicitacao nova = new Solicitacao(
+                        proximoCodigoGerador(), nome, descricao, categoria, prioridade);
                     central.cadastrarSolicitacao(nova);
-                    codigoGerador++;
                     break;
                 }
                 case 2:
@@ -98,13 +110,13 @@ public class Menu {
                     central.consultarUltimaOperacao();
                     break;
                 case 7:
-                    central.exibirHistorico();
+                    central.conluirAtendimento();
                     break;
                 case 8:
-                    central.desfazerUltimaOperacao();
+                    central.exibirHistoricoRecente();
                     break;
                 case 9:
-                    System.out.println("Teste, funcionou!");
+                    central.desfazerUltimaOperacao();
                     break;
                 case 10:
                     System.out.println("Teste, funcionou!");
@@ -122,22 +134,32 @@ public class Menu {
                     System.out.println("Teste, funcionou!");
                     break;
                 case 15:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirHistoricoAtendimentos(true);
                     break;
                 case 16:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirHistoricoAtendimentos(false);
                     break;
                 case 17:
-                    System.out.println("Teste, funcionou!");
+                    central.navegarHistoricoAtendimentos(scanner);
                     break;
-                case 18:
-                    System.out.println("Teste, funcionou!");
+                case 18: {
+                    System.out.print("Informe o código do atendimento: ");
+                    if (!scanner.hasNextLine()) {
+                        break;
+                    }
+                    try {
+                        int codigo = Integer.parseInt(scanner.nextLine().trim());
+                        central.pesquisarAtendimento(codigo);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Código inválido. Digite um número inteiro.");
+                    }
                     break;
+                }
                 case 19:
                     System.out.println("Teste, funcionou!");
                     break;
                 case -1:
-                    central.gerarDadosExemplo();
+                    central.gerarDadosExemplo(this);
                     break;
                 case 0:
                     System.out.println("Encerrando o sistema...");
@@ -150,7 +172,12 @@ public class Menu {
 
         scanner.close();
     }
-
+    public int getCodigoGerador() {
+        return codigoGerador;
+    }
+    public int proximoCodigoGerador() {
+        return codigoGerador++;
+    }
     private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
         while (true) {
             System.out.print(mensagem);

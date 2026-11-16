@@ -5,19 +5,18 @@ package estruturas;
 // Fila Genérica, de qualquer tipo de dado não primitivo.
 // Autor1: Ivan Carlos Alcântara de Oliveira.
 // Data da Criação: 10/10/2026. 15h.
-public class Fila<T> {
+public class FilaEncadeada<T> {
     private Node<T> inicio;
     private Node<T> fim;
     private int qtde;
 
     // Construtor 
-    public Fila( ) {
+    public FilaEncadeada() {
         this.inicio = null;
         this.fim = null;
         this.qtde = 0;
     }
-
-    // Verifica se a fila esta vazia.
+    /// Verifica se a fila esta vazia.
     public boolean qIsEmpty() {
         return qtde == 0;
     }
@@ -30,6 +29,10 @@ public class Fila<T> {
     // @return false, pois a lista não possui limite fixo.
     public boolean isFull() {
        return false;
+    }
+
+    public boolean qIsFull() {
+       return isFull();
     }
 
     // Insere um elemento no final da fila.

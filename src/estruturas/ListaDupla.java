@@ -1,15 +1,15 @@
 package estruturas;
-// Classe DLL<T>: relativa a lista duplamente encadeada, ordenada, dinâmica
-// não circular. tiliza a classe NodeDLL<T>.
+// Classe ListaDupla<T>: relativa a lista duplamente encadeada, ordenada, dinâmica
+// não circular. Utiliza a classe NodeDLL<T>.
 // Lista genérica de qualquer tipo de dado não primitivo.
 // Autor1: Ivan Carlos Alcântara de Oliveira.
 // Data da Criação: 10/10/2026. 15h.
-public class DLL<T extends Comparable<T>> {
-    private NodeDLL<T> head;
+public class ListaDupla<T extends Comparable<T>> {
+    private NoDuplo<T> head;
     private int size;
 
     // construtor da DLL
-    public DLL() {
+    public ListaDupla() {
         head = null;
         size = 0;
     }
@@ -35,7 +35,7 @@ public class DLL<T extends Comparable<T>> {
     }
 
     // Retorna o NodeDLL cabeça de lista 
-    public NodeDLL<T> getHead() {
+    public NoDuplo<T> getHead() {
         return head;
     }
 
@@ -46,7 +46,7 @@ public class DLL<T extends Comparable<T>> {
             return;
         }
         System.out.print("Lista: [ ");
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         while (atual != null) {
             System.out.print(atual.getData());
             atual = atual.getRight();
@@ -61,7 +61,7 @@ public class DLL<T extends Comparable<T>> {
             System.out.print("Lista vazia!\n");
             return;
         }
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         while (atual.getRight() != null) atual = atual.getRight();
         System.out.print("Lista: [ ");
         while (atual != null) {
@@ -75,7 +75,7 @@ public class DLL<T extends Comparable<T>> {
     // Insere um dado (data) na lista em ordem crescente
     public boolean insertAscending(T data) {
         if (isFull()) return false;
-        NodeDLL<T> novo = new NodeDLL<T>(data, null, null);
+        NoDuplo<T> novo = new NoDuplo<T>(data, null, null);
         if (isEmpty()) {
             head = novo;
         } else if (head.getData().compareTo(data) > 0) {
@@ -83,7 +83,7 @@ public class DLL<T extends Comparable<T>> {
             head.setLeft(novo);
             head = novo;
         } else {
-            NodeDLL<T> atual = head;
+            NoDuplo<T> atual = head;
             // Insere depois de valores iguais, mantendo a ordem crescente.
             while (atual.getRight() != null &&
                    atual.getRight().getData().compareTo(data) <= 0) {
@@ -99,9 +99,9 @@ public class DLL<T extends Comparable<T>> {
     }
 
     // Posicoes iniciam em 1; retorna null se a posicao for invalida.
-    public NodeDLL<T> get(int pos) {
+    public NoDuplo<T> get(int pos) {
         if (pos <= 0 || pos > size) return null;
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         for (int i = 1; i < pos; i++) atual = atual.getRight();
         return atual;
     }
@@ -111,9 +111,9 @@ public class DLL<T extends Comparable<T>> {
    // Ao final, define o início da lista como null
    // e atualiza seu tamanho para zero.
     public void clear() {
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         while (atual != null) {
-            NodeDLL<T> proximo = atual.getRight();
+            NoDuplo<T> proximo = atual.getRight();
             atual.setLeft(null);
             atual.setRight(null);
             atual = proximo;
@@ -124,7 +124,7 @@ public class DLL<T extends Comparable<T>> {
 
     // Retorna a posicao (a partir de 1) ou -1 se nao encontrado.
     public int searchAscending(T data) {
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         int pos = 1;
         while (atual != null && atual.getData().compareTo(data) < 0) {
             atual = atual.getRight();
@@ -135,7 +135,7 @@ public class DLL<T extends Comparable<T>> {
 
     // Remove a primeira ocorrencia do valor informado.
     public boolean remove(T data) {
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         while (atual != null && atual.getData().compareTo(data) < 0)
             atual = atual.getRight();
         if (atual == null || atual.getData().compareTo(data) != 0) return false;
@@ -144,8 +144,8 @@ public class DLL<T extends Comparable<T>> {
     }
 
     // Remove e retorna o no na posicao (a partir de 1).
-    public NodeDLL<T> remove(int pos) {
-        NodeDLL<T> atual = get(pos);
+    public NoDuplo<T> remove(int pos) {
+        NoDuplo<T> atual = get(pos);
         if (atual == null) return null;
         unlink(atual);
         return atual;
@@ -155,9 +155,9 @@ public class DLL<T extends Comparable<T>> {
     // ajustando as referências dos nós anterior e próximo.
     // Atualiza o início da lista, quando necessário,
     // desvincula o nó removido e decrementa seu tamanho.
-    private void unlink(NodeDLL<T> atual) {
-        NodeDLL<T> anterior = atual.getLeft();
-        NodeDLL<T> proximo = atual.getRight();
+    private void unlink(NoDuplo<T> atual) {
+        NoDuplo<T> anterior = atual.getLeft();
+        NoDuplo<T> proximo = atual.getRight();
         if (anterior == null) head = proximo;
         else anterior.setRight(proximo);
         if (proximo != null) proximo.setLeft(anterior);
@@ -173,7 +173,7 @@ public class DLL<T extends Comparable<T>> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n[Lista]\nL: [ ");
-        NodeDLL<T> atual = head;
+        NoDuplo<T> atual = head;
         while (atual != null) {
             sb.append(atual.getData());
             atual = atual.getRight();
