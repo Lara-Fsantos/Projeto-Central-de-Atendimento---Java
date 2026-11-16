@@ -41,6 +41,11 @@ public class Menu {
             System.out.println("18 - Pesquisar atendimento\n");
             System.out.println("RELATÓRIOS");
             System.out.println("19 - Exibir resumo do sistema\n");
+            System.out.println("PRIORIDADES");
+            System.out.println("20 - Exibir solicitações por prioridade");
+            System.out.println("21 - Consultar quantidades por prioridade");
+            System.out.println("22 - Demonstrar seleção da próxima solicitação");
+            System.out.println("23 - Cancelar solicitação\n");
             System.out.println("0 - Encerrar");
             System.out.println("-1 - Gerar dados de exemplo (para testes)\n");
             System.out.print("Escolha uma opção: ");
@@ -119,20 +124,44 @@ public class Menu {
                     central.desfazerUltimaOperacao();
                     break;
                 case 10:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirTodasSolicitacoes();
                     break;
-                case 11:
-                    System.out.println("Teste, funcionou!");
+                case 11: {
+                    Integer codigo = lerInteiro(scanner, "Informe o código da solicitação: ");
+                    if (codigo == null) {
+                        System.out.println("Código inválido. Digite um número inteiro.");
+                        break;
+                    }
+                    central.pesquisarSolicitacao(codigo);
                     break;
-                case 12:
-                    System.out.println("Teste, funcionou!");
+                }
+                case 12: {
+                    Integer codigo = lerInteiro(scanner, "Informe o código da solicitação a remover: ");
+                    if (codigo == null) {
+                        System.out.println("Código inválido. Digite um número inteiro.");
+                        break;
+                    }
+                    central.removerSolicitacao(codigo);
                     break;
-                case 13:
-                    System.out.println("Teste, funcionou!");
+                }
+                case 13: {
+                    String status = lerCampoObrigatorio(scanner,
+                            "Status (AGUARDANDO/EM_ATENDIMENTO/CONCLUIDA/CANCELADA): ");
+                    if (status == null) {
+                        break;
+                    }
+                    central.exibirPorStatus(status);
                     break;
-                case 14:
-                    System.out.println("Teste, funcionou!");
+                }
+                case 14: {
+                    String categoria = lerCampoObrigatorio(scanner,
+                            "Categoria (HelpDesk/Suporte/Manutenção): ");
+                    if (categoria == null) {
+                        break;
+                    }
+                    central.exibirPorCategoria(categoria);
                     break;
+                }
                 case 15:
                     central.exibirHistoricoAtendimentos(true);
                     break;
@@ -156,8 +185,32 @@ public class Menu {
                     break;
                 }
                 case 19:
-                    System.out.println("Teste, funcionou!");
+                    central.exibirResumoSistema();
                     break;
+                case 20: {
+                    Integer prioridade = lerInteiro(scanner, "Prioridade (1 = alta, 2 = baixa): ");
+                    if (prioridade == null) {
+                        System.out.println("Prioridade inválida. Digite 1 ou 2.");
+                        break;
+                    }
+                    central.exibirPorPrioridade(prioridade);
+                    break;
+                }
+                case 21:
+                    central.exibirQuantidadesPorPrioridade();
+                    break;
+                case 22:
+                    central.demonstrarSelecao();
+                    break;
+                case 23: {
+                    Integer codigo = lerInteiro(scanner, "Informe o código da solicitação a cancelar: ");
+                    if (codigo == null) {
+                        System.out.println("Código inválido. Digite um número inteiro.");
+                        break;
+                    }
+                    central.cancelarSolicitacao(codigo);
+                    break;
+                }
                 case -1:
                     central.gerarDadosExemplo(this);
                     break;
@@ -177,6 +230,18 @@ public class Menu {
     }
     public int proximoCodigoGerador() {
         return codigoGerador++;
+    }
+    // Lê um inteiro; retorna null se a entrada acabou ou não é um número.
+    private static Integer lerInteiro(Scanner scanner, String mensagem) {
+        System.out.print(mensagem);
+        if (!scanner.hasNextLine()) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
     private static String lerCampoObrigatorio(Scanner scanner, String mensagem) {
         while (true) {

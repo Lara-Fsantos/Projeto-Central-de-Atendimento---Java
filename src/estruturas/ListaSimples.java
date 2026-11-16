@@ -63,7 +63,7 @@ public class ListaSimples<T> {
 	    	  head = aux;
 	    	  // Caso a posição a iserir seja a última ou superior, insere no final
 	      } else if (pos >= size+1) {
-	    		insertTail(id);
+	    		return insertTail(id); // insertTail já incrementa o size
 	      } else {// a posição a inserir é no meio da lista
 	    	// Procura a posição de inserção
 	    	int cont = 1;
@@ -225,9 +225,13 @@ public class ListaSimples<T> {
 	        pAnt = pAnda;
 	        pAnda = pAnda.getProx();
 	      }  // Remove o elemento e retorna o dado
-	      pAnt.setProx(null);
+	      if (pAnt == null) { // lista com um único elemento
+	    	  head = null;
+	      } else {
+	    	  pAnt.setProx(null);
+	      }
     	  size--;
-	      return pAnt.getDado();
+	      return pAnda.getDado();
 	    }
 	}	
 	// print(): percorre a lista e imprime todo o seu conteúdo
@@ -279,4 +283,3 @@ public class ListaSimples<T> {
 	}
 	
 }
-

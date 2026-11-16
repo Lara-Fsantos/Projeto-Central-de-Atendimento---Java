@@ -54,6 +54,20 @@ public class Solicitacao implements Comparable<Solicitacao> {
         return Integer.compare(this.codigo, outra.codigo);
     }
 
+    // Duas solicitações são iguais quando têm o mesmo código
+    // (necessário para ListaSimples.search() e remove(), que usam equals).
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Solicitacao)) return false;
+        return this.codigo == ((Solicitacao) o).codigo;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(codigo);
+    }
+
     public int getCodigo() {
         return codigo;
     }
