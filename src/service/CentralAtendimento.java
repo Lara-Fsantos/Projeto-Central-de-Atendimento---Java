@@ -123,16 +123,22 @@ public class CentralAtendimento {
     }
 
     public void exibirFila() {
-        System.out.println("--- FILA DE ESPERA PRIORIDADE 1 ---");
-        System.out.println(filaEsperaP1);
+        System.out.println("\n========================================");
+        System.out.println("FILA DE SOLICITAÇÕES EM ESPERA");
+        System.out.println("========================================");
+
+        System.out.println("\n--- PRIORIDADE 1 ---");
         if (filaEsperaP1.qIsEmpty()) {
             System.out.println("Não há solicitações na fila de prioridade 1.");
+        } else {
+            System.out.println(filaEsperaP1);
         }
 
-        System.out.println("--- FILA DE ESPERA PRIORIDADE 2 ---");
-        System.out.println(filaEsperaP2);
+        System.out.println("\n--- PRIORIDADE 2 ---");
         if (filaEsperaP2.qIsEmpty()) {
             System.out.println("Não há solicitações na fila de prioridade 2.");
+        } else {
+            System.out.println(filaEsperaP2);
         }
     }
 
@@ -331,9 +337,9 @@ public class CentralAtendimento {
         }
 
         try {
-            historicoOperacoes.pop();
+            historicoOperacoes.push(new Operacao("AGUARDANDO", sol));
         } catch (Exception e) {
-            System.out.println("Erro ao remover a última operação do histórico: " + e.getMessage());
+            System.out.println("Erro ao registrar a volta da solicitação para 'AGUARDANDO': " + e.getMessage());
             return;
         }
 
@@ -414,6 +420,11 @@ public class CentralAtendimento {
         }
 
         Solicitacao solicitacao = no.getDado();
+        if (solicitacao.getStatus().equalsIgnoreCase("CONCLUIDA")) {
+            System.out.println("Não foi possível remover a solicitação #" + codigo + " porque ela já está concluída.");
+            return;
+        }
+
         if (!cadastroGeral.remove(solicitacao)) {
             System.out.println("Não foi possível remover a solicitação #" + codigo + " do cadastro geral.");
             return;

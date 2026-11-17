@@ -45,14 +45,15 @@ public class ListaDupla<T extends Comparable<T>> {
             System.out.print("Lista vazia!\n");
             return;
         }
-        System.out.print("Lista: [ ");
+        System.out.print("Lista:  ");
         NoDuplo<T> atual = head;
         while (atual != null) {
             System.out.print(atual.getData());
+            System.out.println(" ");
             atual = atual.getRight();
             if (atual != null) System.out.print(" ");
         }
-        System.out.print("]");
+        System.out.print("\n");
     }
 
     // Mostra o conteúdo da lista em ordem decrescente
@@ -63,13 +64,14 @@ public class ListaDupla<T extends Comparable<T>> {
         }
         NoDuplo<T> atual = head;
         while (atual.getRight() != null) atual = atual.getRight();
-        System.out.print("Lista: [ ");
+        System.out.print("Lista:  ");
         while (atual != null) {
             System.out.print(atual.getData());
+            System.out.println(" ");
             atual = atual.getLeft();
             if (atual != null) System.out.print(" ");
         }
-        System.out.print("]");
+        System.out.print("\n");
     }
 
     // Insere um dado (data) na lista em ordem crescente

@@ -86,18 +86,21 @@ public class FilaEncadeada<T> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[Fila] quantidade: ").append(qtde);
+        sb.append("\n[Fila]\n");
+        sb.append("Quantidade: ").append(qtde);
         if (!qIsEmpty()) {
-            sb.append(", primeiro: ").append(inicio.getDado())
-              .append(", último: ").append(fim.getDado());
+            sb.append(" | Primeiro: ").append(inicio.getDado())
+              .append(" | Último: ").append(fim.getDado());
         }
-        sb.append("\nConteudo da Fila': [ ");
+        sb.append("\nConteúdo:");
         Node<T> atual = inicio;
         while (atual != null) {
-            sb.append("[").append(atual.getDado()).append("]");
+            sb.append(atual.getDado());
+            if (atual.getProx() != null) {
+                sb.append(" -> ");
+            }
             atual = atual.getProx();
         }
-        sb.append(" ]");
         return sb.toString();
     }
 }
