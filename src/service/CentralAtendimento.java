@@ -348,83 +348,6 @@ public class CentralAtendimento {
         System.out.println("Sucesso: Atendimento da solicitação #" + sol.getCodigo() + " foi desfeito e ela retornou ao início da fila!");
     }
 
-    // Retira a solicitação da fila (ou do atendimento atual), marca como CANCELADA
-    // e registra a operação na pilha. A solicitação continua no cadastro geral.
-    private void executarCancelamento(Solicitacao sol) throws Exception {
-        if (sol.getStatus().equals("EM_ATENDIMENTO")) {
-            if (solicitacaoAtual != null && solicitacaoAtual.equals(sol)) {
-                solicitacaoAtual = null;
-            }
-        } else {
-            FilaEncadeada<Solicitacao> fila = (sol.getPrioridade() == 1) ? filaEsperaP1 : filaEsperaP2;
-            // Recria a fila com dequeue/enqueue, sem o elemento cancelado (mantém o FIFO)
-            int total = fila.totalElementos();
-            boolean achou = false;
-            for (int i = 0; i < total; i++) {
-                Solicitacao s = fila.dequeue();
-                if (!achou && s.equals(sol)) {
-                    achou = true;
-                } else {
-                    fila.enqueue(s);
-                }
-            }
-            if (!achou) {
-                throw new Exception("solicitação #" + sol.getCodigo() + " não encontrada na fila.");
-            }
-        }
-        sol.setStatus("CANCELADA");
-        historicoOperacoes.push(new Operacao("CANCELAMENTO", sol));
-    }
-
-    public void cancelarSolicitacao(int codigo) {
-        Node<Solicitacao> no = cadastroGeral.search(codigoBusca(codigo));
-        if (no == null) {
-            System.out.println("Solicitação #" + codigo + " não encontrada no cadastro geral.");
-            return;
-        }
-        Solicitacao sol = no.getDado();
-        if (sol.getStatus().equals("CONCLUIDA")) {
-            System.out.println("Solicitação #" + codigo + " já foi concluída e não pode ser cancelada.");
-            return;
-        }
-        if (sol.getStatus().equals("CANCELADA")) {
-            System.out.println("Solicitação #" + codigo + " já está cancelada.");
-            return;
-        }
-        try {
-            executarCancelamento(sol);
-            System.out.println("Solicitação #" + codigo + " cancelada com sucesso.");
-        } catch (Exception e) {
-            System.out.println("Erro ao cancelar solicitação: " + e.getMessage());
-        }
-    }
-
-    // Remove do cadastro geral. Se ainda estiver ativa, é cancelada antes
-    // (saindo da fila ou do atendimento). Concluídas pertencem ao histórico: não são removidas.
-    public void removerSolicitacao(int codigo) {
-        Node<Solicitacao> no = cadastroGeral.search(codigoBusca(codigo));
-        if (no == null) {
-            System.out.println("Solicitação #" + codigo + " não encontrada no cadastro geral.");
-            return;
-        }
-        Solicitacao sol = no.getDado();
-        if (sol.getStatus().equals("CONCLUIDA")) {
-            System.out.println("Solicitação #" + codigo + " já foi concluída: faz parte do histórico e não pode ser removida.");
-            return;
-        }
-        try {
-            if (!sol.getStatus().equals("CANCELADA")) {
-                executarCancelamento(sol);
-            }
-            cadastroGeral.remove(sol);
-            historicoOperacoes.push(new Operacao("REMOCAO", sol));
-            System.out.println("Solicitação #" + codigo + " removida do cadastro geral.");
-        } catch (Exception e) {
-            System.out.println("Erro ao remover solicitação: " + e.getMessage());
-        }
-    }
-
-    // Solicitação usada apenas como chave de busca (equals/compareTo comparam o código).
     private Solicitacao codigoBusca(int codigo) {
         Solicitacao busca = new Solicitacao();
         busca.setCodigo(codigo);
@@ -456,6 +379,60 @@ public class CentralAtendimento {
         }
         System.out.println("--- SOLICITAÇÃO ENCONTRADA ---");
         System.out.println(no.getDado());
+    }
+
+    private FilaEncadeada<Solicitacao> removerDaFila(FilaEncadeada<Solicitacao> fila, Solicitacao solicitacao) {
+        if (fila == null || fila.qIsEmpty()) {
+            return fila;
+        }
+
+        FilaEncadeada<Solicitacao> filaAtualizada = new FilaEncadeada<Solicitacao>();
+        try {
+            while (!fila.qIsEmpty()) {
+                Solicitacao atual = fila.dequeue();
+                if (!atual.equals(solicitacao)) {
+                    filaAtualizada.enqueue(atual);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao remover a solicitação da fila: " + e.getMessage());
+            return fila;
+        }
+        return filaAtualizada;
+    }
+
+    public void removerSolicitacao(int codigo) {
+        if (cadastroGeral.isEmpty()) {
+            System.out.println("Não há solicitações cadastradas.");
+            return;
+        }
+
+        Node<Solicitacao> no = cadastroGeral.search(codigoBusca(codigo));
+        if (no == null) {
+            System.out.println("Solicitação #" + codigo + " não encontrada no cadastro geral.");
+            return;
+        }
+
+        Solicitacao solicitacao = no.getDado();
+        if (!cadastroGeral.remove(solicitacao)) {
+            System.out.println("Não foi possível remover a solicitação #" + codigo + " do cadastro geral.");
+            return;
+        }
+
+        filaEsperaP1 = removerDaFila(filaEsperaP1, solicitacao);
+        filaEsperaP2 = removerDaFila(filaEsperaP2, solicitacao);
+
+        if (solicitacaoAtual != null && solicitacaoAtual.equals(solicitacao)) {
+            solicitacaoAtual = null;
+        }
+
+        solicitacao.setStatus("CANCELADA");
+        try {
+            historicoOperacoes.push(new Operacao("REMOVIDO", solicitacao));
+        } catch (Exception e) {
+            System.out.println("Erro ao registrar a remoção no histórico: " + e.getMessage());
+        }
+        System.out.println("Solicitação #" + codigo + " removida com sucesso.");
     }
 
     public void exibirPorStatus(String status) {
@@ -498,102 +475,20 @@ public class CentralAtendimento {
         }
     }
 
-    // Copia a fila para um vetor usando apenas dequeue/enqueue (a fila não muda).
-    private Solicitacao[] copiarFila(FilaEncadeada<Solicitacao> fila) throws Exception {
-        int total = fila.totalElementos();
-        Solicitacao[] copia = new Solicitacao[total];
-        for (int i = 0; i < total; i++) {
-            copia[i] = fila.dequeue();
-            fila.enqueue(copia[i]);
-        }
-        return copia;
-    }
-
-    public void exibirPorPrioridade(int prioridade) {
-        FilaEncadeada<Solicitacao> fila;
-        if (prioridade == 1) {
-            fila = filaEsperaP1;
-        } else if (prioridade == 2) {
-            fila = filaEsperaP2;
-        } else {
-            System.out.println("Prioridade inválida. Use 1 (alta) ou 2 (baixa).");
-            return;
-        }
-        System.out.println("--- SOLICITAÇÕES AGUARDANDO - PRIORIDADE " + prioridade + " ---");
-        if (fila.qIsEmpty()) {
-            System.out.println("Não há solicitações aguardando na fila de prioridade " + prioridade + ".");
-            return;
-        }
-        try {
-            Solicitacao[] v = copiarFila(fila);
-            for (int i = 0; i < v.length; i++) {
-                System.out.println(v[i]);
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao exibir solicitações: " + e.getMessage());
-        }
-    }
-
-    public void exibirQuantidadesPorPrioridade() {
-        int p1 = filaEsperaP1.totalElementos();
-        int p2 = filaEsperaP2.totalElementos();
-        System.out.println("--- QUANTIDADES POR PRIORIDADE ---");
-        System.out.println("Prioridade 1 (alta): " + p1);
-        System.out.println("Prioridade 2 (baixa): " + p2);
-        System.out.println("Total aguardando atendimento: " + (p1 + p2));
-    }
-
-    // Mostra a ordem em que as solicitações seriam atendidas usando a mesma regra
-    // de quemAtender(), sem alterar filas nem contador.
-    public void demonstrarSelecao() {
-        System.out.println("--- DEMONSTRAÇÃO DA SELEÇÃO DA PRÓXIMA SOLICITAÇÃO ---");
-        System.out.println("Regra: com as duas filas esperando, a cada 3 atendimentos 2 saem da fila P1 e 1 da fila P2 (FIFO em cada fila).");
-        System.out.println("Se uma das filas estiver vazia, atende-se a outra, sem consumir o ciclo.");
-        try {
-            Solicitacao[] v1 = copiarFila(filaEsperaP1);
-            Solicitacao[] v2 = copiarFila(filaEsperaP2);
-            if (v1.length == 0 && v2.length == 0) {
-                System.out.println("Não há solicitações aguardando atendimento.");
-                return;
-            }
-            int i1 = 0, i2 = 0, contador = contadorAtendimentos, ordem = 1;
-            while (i1 < v1.length || i2 < v2.length) {
-                boolean disputa = i1 < v1.length && i2 < v2.length;
-                boolean daP1;
-                if (i1 >= v1.length) {
-                    daP1 = false;
-                } else if (i2 >= v2.length) {
-                    daP1 = true;
-                } else {
-                    daP1 = (contador != 2);
-                }
-                Solicitacao s = daP1 ? v1[i1++] : v2[i2++];
-                System.out.println(ordem + "º -> #" + s.getCodigo() + " (P" + s.getPrioridade() + ") - " + s.getSolicitante());
-                if (disputa) {
-                    contador = (contador + 1) % 3;
-                }
-                ordem++;
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao demonstrar a seleção: " + e.getMessage());
-        }
-    }
-
     public void exibirResumoSistema() {
-        int aguardando = 0, emAtendimento = 0, concluidas = 0, canceladas = 0;
+        int aguardando = 0, emAtendimento = 0, concluidas = 0;
         Node<Solicitacao> atual = cadastroGeral.getHead();
         while (atual != null) {
             String st = atual.getDado().getStatus();
             if (st.equals("AGUARDANDO")) aguardando++;
             else if (st.equals("EM_ATENDIMENTO")) emAtendimento++;
             else if (st.equals("CONCLUIDA")) concluidas++;
-            else if (st.equals("CANCELADA")) canceladas++;
             atual = atual.getProx();
         }
         System.out.println("========== RESUMO DO SISTEMA ==========");
         System.out.println("Cadastro geral: " + cadastroGeral.getSize() + " solicitações");
         System.out.println("  Aguardando: " + aguardando + " | Em atendimento: " + emAtendimento
-                + " | Concluídas: " + concluidas + " | Canceladas: " + canceladas);
+                + " | Concluídas: " + concluidas);
         System.out.println("Fila P1: " + filaEsperaP1.totalElementos() + " | Fila P2: " + filaEsperaP2.totalElementos()
                 + " | Total aguardando: " + (filaEsperaP1.totalElementos() + filaEsperaP2.totalElementos()));
         if (solicitacaoAtual == null) {

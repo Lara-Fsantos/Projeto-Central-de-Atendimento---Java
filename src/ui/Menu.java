@@ -41,11 +41,6 @@ public class Menu {
             System.out.println("18 - Pesquisar atendimento\n");
             System.out.println("RELATÓRIOS");
             System.out.println("19 - Exibir resumo do sistema\n");
-            System.out.println("PRIORIDADES");
-            System.out.println("20 - Exibir solicitações por prioridade");
-            System.out.println("21 - Consultar quantidades por prioridade");
-            System.out.println("22 - Demonstrar seleção da próxima solicitação");
-            System.out.println("23 - Cancelar solicitação\n");
             System.out.println("0 - Encerrar");
             System.out.println("-1 - Gerar dados de exemplo (para testes)\n");
             System.out.print("Escolha uma opção: ");
@@ -146,7 +141,7 @@ public class Menu {
                 }
                 case 13: {
                     String status = lerCampoObrigatorio(scanner,
-                            "Status (AGUARDANDO/EM_ATENDIMENTO/CONCLUIDA/CANCELADA): ");
+                            "Status (AGUARDANDO/EM_ATENDIMENTO/CONCLUIDA): ");
                     if (status == null) {
                         break;
                     }
@@ -184,31 +179,8 @@ public class Menu {
                     }
                     break;
                 }
-                case 19:
+                case 19: {
                     central.exibirResumoSistema();
-                    break;
-                case 20: {
-                    Integer prioridade = lerInteiro(scanner, "Prioridade (1 = alta, 2 = baixa): ");
-                    if (prioridade == null) {
-                        System.out.println("Prioridade inválida. Digite 1 ou 2.");
-                        break;
-                    }
-                    central.exibirPorPrioridade(prioridade);
-                    break;
-                }
-                case 21:
-                    central.exibirQuantidadesPorPrioridade();
-                    break;
-                case 22:
-                    central.demonstrarSelecao();
-                    break;
-                case 23: {
-                    Integer codigo = lerInteiro(scanner, "Informe o código da solicitação a cancelar: ");
-                    if (codigo == null) {
-                        System.out.println("Código inválido. Digite um número inteiro.");
-                        break;
-                    }
-                    central.cancelarSolicitacao(codigo);
                     break;
                 }
                 case -1:
@@ -222,8 +194,6 @@ public class Menu {
                     break;
             }
         }
-
-        scanner.close();
     }
     public int getCodigoGerador() {
         return codigoGerador;
